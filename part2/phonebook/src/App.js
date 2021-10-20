@@ -12,7 +12,12 @@ const App = () => {
 
   const handleNameSubmit = (event) => {
     event.preventDefault()
-    setPersons([...persons, { name: newName }])
+    if (persons.filter(e => e.name === newName).length === 0) {
+      setPersons([...persons, { name: newName }])
+    }
+    else {
+      alert(`${newName} is already added to the phonebook`)
+    }
     setNewName('')
   }
 
@@ -21,7 +26,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={handleNameSubmit}>
         <div>
-          name: <input onChange={handleValueChange} />
+          name: <input value={newName} onChange={handleValueChange} />
         </div>
         <div>
           <button type="submit">add</button>
