@@ -1,8 +1,6 @@
-import React from 'react'
+import React from "react"
 
-const Header = (props) => (
-  <h1>{props.course}</h1>
-)
+const Header = (props) => <h1>{props.course}</h1>
 
 const Part = (props) => (
   <p>
@@ -19,23 +17,28 @@ const Content = (props) => (
 )
 
 const Total = (props) => (
-  <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}</p>
+  <p>
+    Number of exercises{" "}
+    {props.parts[0].exercises +
+      props.parts[1].exercises +
+      props.parts[2].exercises}
+  </p>
 )
 
 const App = () => {
   const course = {
-    name: 'Half Stack application development',
+    name: "Half Stack application development",
     parts: [
       {
-        name: 'Fundamentals of React',
+        name: "Fundamentals of React",
         exercises: 10
       },
       {
-        name: 'Using props to pass data',
+        name: "Using props to pass data",
         exercises: 7
       },
       {
-        name: 'State of a component',
+        name: "State of a component",
         exercises: 14
       }
     ]
