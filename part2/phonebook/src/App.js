@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react"
+import "./App.css"
 import personsUtils from "./services/persons"
+
+const Notification = ({ level, message }) => (
+  <div className={`notification ${level}`}>{message}</div>
+)
 
 const Filter = ({ filteringValue, handleFilteringChange }) => (
   <div>
@@ -28,11 +33,19 @@ const Form = ({
   </form>
 )
 
-const Persons = ({ entriesShown, setPersons }) => {
+const Persons = ({ entriesShown, setPersons, setNotificationStatus }) => {
   const handleDelete = (id) => {
     personsUtils.deletePerson(id).then(() => {
       personsUtils.getAll().then((allPersons) => {
         setPersons(allPersons)
+        setNotificationStatus({
+          show: true,
+          level: "success",
+          message: "Removed entry"
+        })
+        setTimeout(() => {
+          setNotificationStatus({ show: false, level: "", message: "" })
+        }, 5000)
       })
     })
   }
@@ -61,6 +74,11 @@ const App = () => {
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
   const [filteringValue, setFilteringValue] = useState("")
+  const [notificationStatus, setNotificationStatus] = useState({
+    show: false,
+    message: "",
+    level: ""
+  })
 
   useEffect(() => {
     personsUtils.getAll().then((allNumbers) => {
@@ -98,6 +116,14 @@ const App = () => {
         })
         .then((newPerson) => {
           setPersons([...persons, newPerson])
+          setNotificationStatus({
+            show: true,
+            level: "success",
+            message: `Added ${newPerson.name}`
+          })
+          setTimeout(() => {
+            setNotificationStatus({ show: false, level: "", message: "" })
+          }, 5000)
         })
     } else {
       if (
@@ -113,9 +139,17 @@ const App = () => {
             ...person,
             number: newNumber
           })
-          .then((newPerson) =>
+          .then((newPerson) => {
             setPersons(persons.map((p) => (p.id !== person.id ? p : newPerson)))
-          )
+            setNotificationStatus({
+              show: true,
+              level: "success",
+              message: `Edited ${newPerson.name}`
+            })
+            setTimeout(() => {
+              setNotificationStatus({ show: false, level: "", message: "" })
+            }, 5000)
+          })
       }
     }
     setNewName("")
@@ -125,6 +159,12 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      {notificationStatus.show ? (
+        <Notification
+          level={notificationStatus.level}
+          message={notificationStatus.message}
+        />
+      ) : null}
       <Filter
         filteringValue={filteringValue}
         handleFilteringChange={handleFilteringChange}
@@ -138,7 +178,11 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons entriesShown={entriesShown} setPersons={setPersons} />
+      <Persons
+        entriesShown={entriesShown}
+        setPersons={setPersons}
+        setNotificationStatus={setNotificationStatus}
+      />
     </div>
   )
 }
