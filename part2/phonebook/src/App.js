@@ -46,7 +46,6 @@ const App = () => {
 
   useEffect(() => {
     axios.get("http://localhost:3001/persons").then((result) => {
-      console.log(result.data)
       setPersons(result.data)
     })
   }, [])
@@ -70,10 +69,15 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
     if (persons.filter((e) => e.name === newName).length === 0) {
-      setPersons([
-        ...persons,
-        { name: newName, number: newNumber, id: persons.length + 1 }
-      ])
+      axios
+        .post("http://localhost:3001/persons", {
+          name: newName,
+          number: newNumber,
+          id: persons.length + 1
+        })
+        .then((result) => {
+          setPersons([...persons, result.data])
+        })
     } else {
       alert(`${newName} is already added to the phonebook`)
     }
