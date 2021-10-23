@@ -100,7 +100,23 @@ const App = () => {
           setPersons([...persons, newPerson])
         })
     } else {
-      alert(`${newName} is already added to the phonebook`)
+      if (
+        window.confirm(
+          `${newName} is already added to the phonebook, replace the old number with a new one?`
+        )
+      ) {
+        const person = persons.find(
+          (p) => p.name.toLowerCase() === newName.toLowerCase()
+        )
+        personsUtils
+          .changeNumber({
+            ...person,
+            number: newNumber
+          })
+          .then((newPerson) =>
+            setPersons(persons.map((p) => (p.id !== person.id ? p : newPerson)))
+          )
+      }
     }
     setNewName("")
     setNewNumber("")

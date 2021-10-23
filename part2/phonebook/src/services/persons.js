@@ -12,10 +12,15 @@ const sendPerson = (newPerson) => {
   return request.then((response) => response.data)
 }
 
+const changeNumber = (newPerson) => {
+  const request = axios.put(`${endpoint}/${newPerson.id}`, newPerson)
+  return request.then((response) => response.data)
+}
+
 const deletePerson = (id) => {
   return axios.delete(`${endpoint}/${id}`)
 }
 
-const personsUtils = { getAll, sendPerson, deletePerson }
+const personsUtils = { getAll, sendPerson, changeNumber, deletePerson }
 
 export default personsUtils
