@@ -12,6 +12,10 @@ const sendPerson = (newPerson) => {
   return request.then((response) => response.data)
 }
 
-const personsUtils = { getAll, sendPerson }
+const deletePerson = (id) => {
+  return axios.delete(`${endpoint}/${id}`)
+}
+
+const personsUtils = { getAll, sendPerson, deletePerson }
 
 export default personsUtils

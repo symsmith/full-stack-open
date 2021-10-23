@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react"
-import axios from "axios"
 import personsUtils from "./services/persons"
 
 const Filter = ({ filteringValue, handleFilteringChange }) => (
@@ -29,15 +28,33 @@ const Form = ({
   </form>
 )
 
-const Persons = ({ entriesShown }) => (
-  <div>
-    {entriesShown.map((person) => (
-      <p key={person.name}>
-        {person.name} &mdash; {person.number}
-      </p>
-    ))}
-  </div>
-)
+const Persons = ({ entriesShown, setPersons }) => {
+  const handleDelete = (id) => {
+    personsUtils.deletePerson(id).then(() => {
+      personsUtils.getAll().then((allPersons) => {
+        setPersons(allPersons)
+      })
+    })
+  }
+  return (
+    <div>
+      {entriesShown.map((person) => (
+        <p key={person.name}>
+          {person.name} &mdash; {person.number}{" "}
+          <button
+            onClick={() =>
+              window.confirm(`Delete ${person.name}?`)
+                ? handleDelete(person.id)
+                : null
+            }
+          >
+            Delete
+          </button>
+        </p>
+      ))}
+    </div>
+  )
+}
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -105,7 +122,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons entriesShown={entriesShown} />
+      <Persons entriesShown={entriesShown} setPersons={setPersons} />
     </div>
   )
 }
