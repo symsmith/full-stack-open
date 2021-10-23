@@ -35,19 +35,31 @@ const Form = ({
 
 const Persons = ({ entriesShown, setPersons, setNotificationStatus }) => {
   const handleDelete = (id) => {
-    personsUtils.deletePerson(id).then(() => {
-      personsUtils.getAll().then((allPersons) => {
-        setPersons(allPersons)
+    personsUtils
+      .deletePerson(id)
+      .then(() => {
+        personsUtils.getAll().then((allPersons) => {
+          setPersons(allPersons)
+          setNotificationStatus({
+            show: true,
+            level: "success",
+            message: "Removed entry"
+          })
+          setTimeout(() => {
+            setNotificationStatus({ show: false, level: "", message: "" })
+          }, 5000)
+        })
+      })
+      .catch(() => {
         setNotificationStatus({
           show: true,
-          level: "success",
-          message: "Removed entry"
+          level: "error",
+          message: "Something went wrong..."
         })
         setTimeout(() => {
           setNotificationStatus({ show: false, level: "", message: "" })
         }, 5000)
       })
-    })
   }
   return (
     <div>
@@ -125,6 +137,16 @@ const App = () => {
             setNotificationStatus({ show: false, level: "", message: "" })
           }, 5000)
         })
+        .catch(() => {
+          setNotificationStatus({
+            show: true,
+            level: "error",
+            message: "Something went wrong..."
+          })
+          setTimeout(() => {
+            setNotificationStatus({ show: false, level: "", message: "" })
+          }, 5000)
+        })
     } else {
       if (
         window.confirm(
@@ -149,6 +171,17 @@ const App = () => {
             setTimeout(() => {
               setNotificationStatus({ show: false, level: "", message: "" })
             }, 5000)
+          })
+          .catch(() => {
+            setNotificationStatus({
+              show: true,
+              level: "error",
+              message: `${person.name} is already deleted on the server`
+            })
+            setTimeout(() => {
+              setNotificationStatus({ show: false, level: "", message: "" })
+            }, 5000)
+            setPersons(persons.filter((p) => p.name !== person.name))
           })
       }
     }
