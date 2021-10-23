@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
+import personsUtils from "./services/persons"
 
 const Filter = ({ filteringValue, handleFilteringChange }) => (
   <div>
@@ -45,8 +46,8 @@ const App = () => {
   const [filteringValue, setFilteringValue] = useState("")
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((result) => {
-      setPersons(result.data)
+    personsUtils.getAll().then((allNumbers) => {
+      setPersons(allNumbers)
     })
   }, [])
 
@@ -68,15 +69,18 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    if (persons.filter((e) => e.name === newName).length === 0) {
-      axios
-        .post("http://localhost:3001/persons", {
+    if (
+      persons.filter((e) => e.name.toLowerCase() === newName.toLowerCase())
+        .length === 0
+    ) {
+      personsUtils
+        .sendPerson({
           name: newName,
           number: newNumber,
           id: persons.length + 1
         })
-        .then((result) => {
-          setPersons([...persons, result.data])
+        .then((newPerson) => {
+          setPersons([...persons, newPerson])
         })
     } else {
       alert(`${newName} is already added to the phonebook`)
