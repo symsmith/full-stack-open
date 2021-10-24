@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const endpoint = "http://localhost:3001/persons"
+const endpoint = "/api/persons"
 
 const getAll = () => {
   const request = axios.get(endpoint)
