@@ -50,11 +50,11 @@ const Persons = ({ entriesShown, setPersons, setNotificationStatus }) => {
           }, 5000)
         })
       })
-      .catch(() => {
+      .catch((e) => {
         setNotificationStatus({
           show: true,
           level: "error",
-          message: "Something went wrong..."
+          message: e.response.data
         })
         setTimeout(() => {
           setNotificationStatus({ show: false, level: "", message: "" })
@@ -136,11 +136,12 @@ const App = () => {
             setNotificationStatus({ show: false, level: "", message: "" })
           }, 5000)
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(e.response.data)
           setNotificationStatus({
             show: true,
             level: "error",
-            message: "Something went wrong..."
+            message: e.response.data.error
           })
           setTimeout(() => {
             setNotificationStatus({ show: false, level: "", message: "" })
