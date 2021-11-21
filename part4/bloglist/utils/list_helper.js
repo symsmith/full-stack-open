@@ -41,7 +41,7 @@ const mostBlogs = (blogs) => {
   const findMostBlogs = (authors) => {
     let mostBlogs = authors[0]
     authors.forEach((author) => {
-      if (mostBlogs.blogs < author.blog) {
+      if (mostBlogs.blogs < author.blogs) {
         mostBlogs = author
       }
     })
@@ -51,4 +51,34 @@ const mostBlogs = (blogs) => {
   return findMostBlogs(authorList)
 }
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs }
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) return undefined
+
+  let authorList = []
+  let currentAuthor
+  blogs.forEach((blog) => {
+    authorList.forEach((author) => {
+      if (author.author === blog.author) {
+        currentAuthor = author
+      }
+    })
+    if (currentAuthor) currentAuthor.likes += blog.likes
+    else
+      authorList = [...authorList, { author: blog.author, likes: blog.likes }]
+    currentAuthor = undefined
+  })
+
+  const findMostLikes = (authors) => {
+    let mostLikes = authors[0]
+    authors.forEach((author) => {
+      if (mostLikes.likes < author.likes) {
+        mostLikes = author
+      }
+    })
+    return mostLikes
+  }
+
+  return findMostLikes(authorList)
+}
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes }

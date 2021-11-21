@@ -138,3 +138,59 @@ describe("most blogs", () => {
     })
   })
 })
+
+describe("most likes", () => {
+  const firstBlog = {
+    _id: "5a422aa71b54a676234d17f8",
+    title: "Go To Statement Considered Harmful",
+    author: "Edsger W. Dijkstra",
+    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+    likes: 5,
+    __v: 0
+  }
+  const secondBlog = {
+    _id: "ui6516i51i651e561i6",
+    title: "Go To Statement Considered Harmful",
+    author: "Someone Else",
+    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+    likes: 10,
+    __v: 0
+  }
+  const thirdBlog = {
+    _id: "ui6516i51i651e561i6",
+    title: "Go To Statement Considered Harmful",
+    author: "Edsger W. Dijkstra",
+    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+    likes: 13,
+    __v: 0
+  }
+
+  const listWithOneBlog = [firstBlog]
+  const listWithTwoBlogs = [firstBlog, secondBlog]
+  const listWithThreeBlogs = [firstBlog, secondBlog, thirdBlog]
+
+  test("when list is empty, is undefined", () => {
+    expect(listHelper.mostLikes([])).toBe(undefined)
+  })
+
+  test("when list has only one blog, is the likes of this blog", () => {
+    expect(listHelper.mostLikes(listWithOneBlog)).toEqual({
+      author: "Edsger W. Dijkstra",
+      likes: 5
+    })
+  })
+
+  test("when list has two blogs, is the author, with most likes", () => {
+    expect(listHelper.mostLikes(listWithTwoBlogs)).toEqual({
+      author: "Someone Else",
+      likes: 10
+    })
+  })
+
+  test("when list has three blogs, is the author, with most likes", () => {
+    expect(listHelper.mostLikes(listWithThreeBlogs)).toEqual({
+      author: "Edsger W. Dijkstra",
+      likes: 18
+    })
+  })
+})
